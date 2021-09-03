@@ -33,6 +33,33 @@ Please install dependencies by
 pip install -r requirements.txt
 ```
 
+Installation of the torch-geometric module needs to be carefully handled as indicated in https://pytorch-geometric.readthedocs.io/en/latest/notes/installation.html#installation-via-binaries.
+
+As of September 3rd, for compute canada, the torch version is 1.9.0, CUDA version is 10.0, checked through:
+```
+python -c "import torch; print(torch.__version__)"
+```
+and 
+```
+python -c "import torch; print(torch.version.cuda)"
+```
+
+For my compute canada set up, needed to install the following modules:
+```pip install --no-index torch-scatter -f https://pytorch-geometric.com/whl/torch-${TORCH}+${CUDA}.html
+pip install --no-index torch-sparse -f https://pytorch-geometric.com/whl/torch-${TORCH}+${CUDA}.html
+pip install --no-index torch-geometric
+```
+
+where ${CUDA} and ${TORCH} should be replaced by the specific CUDA version (cpu, cu92, cu101, cu102, cu110, cu111) and PyTorch version (1.4.0, 1.5.0, 1.6.0, 1.7.0, 1.7.1, 1.8.0, 1.8.1, 1.9.0), respectively. For example, for PyTorch 1.9.0 and CUDA 11.1, type:
+
+
+```pip install --no-index torch-scatter -f https://pytorch-geometric.com/whl/torch-1.9.0+cu102.html
+pip install --no-index torch-sparse -f https://pytorch-geometric.com/whl/torch-1.9.0+cu102.html
+pip install --no-index torch-geometric```
+```
+Suggestion taken from StackOverFlow post:https://stackoverflow.com/questions/65860764/pytorch-torch-sparse-installation-without-cuda
+
+
 ### Dataset
 
 - We use the **ReDial** dataset, which will be automatically downloaded by the script.
