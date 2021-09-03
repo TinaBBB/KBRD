@@ -9,14 +9,10 @@ For documentation, see parlai.scripts.train_model.
 """
 import os
 import sys
-import inspect
 
 SUB_DIR = os.path.dirname(sys.modules['__main__'].__file__)
-# print(os.path.dirname(sys.modules['__main__'].__file__))
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-# print(ROOT_DIR)
 PROJ_DIR = ROOT_DIR.rstrip(SUB_DIR)
-# print(ROOT_DIR.rstrip(SUB_DIR))
 sys.path.insert(0, PROJ_DIR)
 
 from parlai.scripts.train_model import TrainLoop, setup_args

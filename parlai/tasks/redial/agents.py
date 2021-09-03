@@ -1,16 +1,10 @@
-import copy
-import re
-import csv
 import json
 import os
 import pickle as pkl
+import re
 
-import requests
-
-import parlai.core.agents as core_agents
-from parlai.core.teachers import DialogTeacher
 from parlai.core.dict import DictionaryAgent
-
+from parlai.core.teachers import DialogTeacher
 from .build import build
 
 
@@ -122,14 +116,14 @@ class RedialTeacher(DialogTeacher):
                 source_text = []
                 target_text = []
                 while (
-                    message_idx < len(messages)
-                    and messages[message_idx]["senderWorkerId"] == initiator_id
+                        message_idx < len(messages)
+                        and messages[message_idx]["senderWorkerId"] == initiator_id
                 ):
                     source_text.append(messages[message_idx]["text"])
                     message_idx += 1
                 while (
-                    message_idx < len(messages)
-                    and messages[message_idx]["senderWorkerId"] == respondent_id
+                        message_idx < len(messages)
+                        and messages[message_idx]["senderWorkerId"] == respondent_id
                 ):
                     target_text.append(messages[message_idx]["text"])
                     message_idx += 1
@@ -152,7 +146,9 @@ class RedialTeacher(DialogTeacher):
                     turn += 1
                     if message_idx == len(messages) and target_text == "":
                         break
-                    yield (source_text, [target_text], None, [str(turn), ' '.join(previously_mentioned_movies_list + source_movie_list), ' '.join(target_movie_list), ' '.join(mentioned_entities), target_text], None), new_episode
+                    yield (source_text, [target_text], None,
+                           [str(turn), ' '.join(previously_mentioned_movies_list + source_movie_list),
+                            ' '.join(target_movie_list), ' '.join(mentioned_entities), target_text], None), new_episode
                     new_episode = False
                     previously_mentioned_movies_list += source_movie_list + target_movie_list
                     mentioned_entities += target_mentioned_entities

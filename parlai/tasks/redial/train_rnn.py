@@ -7,6 +7,13 @@
 
 For documentation, see parlai.scripts.train_model.
 """
+import os
+import sys
+
+SUB_DIR = os.path.dirname(sys.modules['__main__'].__file__)
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJ_DIR = ROOT_DIR.rstrip(SUB_DIR)
+sys.path.insert(0, PROJ_DIR)
 
 from parlai.scripts.train_model import TrainLoop, setup_args
 

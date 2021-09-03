@@ -5,6 +5,12 @@ import pickle as pkl
 import random
 import re
 from collections import defaultdict
+import sys
+
+SUB_DIR = os.path.dirname(sys.modules['__main__'].__file__)
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJ_DIR = ROOT_DIR.rstrip(SUB_DIR)
+sys.path.insert(0, PROJ_DIR)
 
 import parlai.core.build_data as build_data
 

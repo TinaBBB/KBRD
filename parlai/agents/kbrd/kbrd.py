@@ -11,11 +11,8 @@ from torch.nn import functional as F
 from sklearn.feature_extraction.text import TfidfVectorizer
 from gensim.models.doc2vec import TaggedDocument, Doc2Vec
 import nltk
-
-
 from parlai.core.torch_agent import Output, TorchAgent
 from parlai.core.utils import round_sigfigs
-
 from .modules import KBRD
 
 

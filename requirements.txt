@@ -23,4 +23,5 @@ tqdm
 torch
 gensim
 torch_geometric
+tensorboardX
 
