@@ -1,14 +1,14 @@
 import math
 from collections import defaultdict
 
-import networkx as nx
-import numpy as np
+# import networkx as nx
+# import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from sklearn.metrics import roc_auc_score
-from torch_geometric.nn.conv.gat_conv import GATConv
-from torch_geometric.nn.conv.gcn_conv import GCNConv
+# from sklearn.metrics import roc_auc_score
+# from torch_geometric.nn.conv.gat_conv import GATConv
+# from torch_geometric.nn.conv.gcn_conv import GCNConv
 from torch_geometric.nn.conv.rgcn_conv import RGCNConv
 
 

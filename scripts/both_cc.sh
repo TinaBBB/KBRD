@@ -13,4 +13,4 @@ do
 done
 
 
-
+CUDA_VISIBLE_DEVICES=0 python parlai/tasks/redial/train_kbrd.py -mf saved/both_rgcn_0

@@ -21,3 +21,6 @@ tqdm
 # websocket-client
 # websocket-server
 torch
+gensim
+torch_geometric
+
