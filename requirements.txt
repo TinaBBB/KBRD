@@ -8,16 +8,15 @@ joblib
 nltk
 numpy
 pexpect
-py-gfm
-pyzmq
+# py-gfm
+# pyzmq
 regex
 requests
 scikit-learn
 scipy
-sh
-sphinx
-sphinx_rtd_theme
+# sh
+# sphinx
+# sphinx_rtd_theme
 tqdm
-websocket-client
-websocket-server
-SciPy
+# websocket-client
+# websocket-server
