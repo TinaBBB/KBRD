@@ -2,20 +2,18 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
+import math
+import os
+import pickle as pkl
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import os
-import math
-import pickle as pkl
-from collections import OrderedDict
-import numpy as np
-
+from parlai.agents.kbrd.modules import KBRD
 from parlai.core.torch_generator_agent import TorchGeneratorModel
 from parlai.core.utils import neginf
-from parlai.agents.kbrd.modules import KBRD
-from parlai.agents.kbrd.kbrd import _load_kg_embeddings
 
 
 def _normalize(tensor, norm_layer):
@@ -73,6 +71,7 @@ def _build_decoder(opt, dictionary, embedding=None, padding_idx=None,
 
 class TransformerMemNetModel(nn.Module):
     """Model which takes context, memories, candidates and encodes them"""
+
     def __init__(self, opt, dictionary):
         super().__init__()
         self.opt = opt
@@ -185,14 +184,17 @@ def create_position_codes(n_pos, dim, out):
         for pos in range(n_pos)
     ])
 
-    out[:, 0::2] = torch.FloatTensor(np.sin(position_enc)).type_as(out)
-    out[:, 1::2] = torch.FloatTensor(np.cos(position_enc)).type_as(out)
     out.detach_()
     out.requires_grad = False
+    out[:, 0::2] = torch.FloatTensor(np.sin(position_enc)).type_as(out)
+    out[:, 1::2] = torch.FloatTensor(np.cos(position_enc)).type_as(out)
+    # out.detach_()
+    # out.requires_grad = False
 
 
 class TransformerResponseWrapper(nn.Module):
     """Transformer response rapper. Pushes input through transformer and MLP"""
+
     def __init__(self, transformer, hdim):
         super(TransformerResponseWrapper, self).__init__()
         dim = transformer.out_dim
@@ -233,22 +235,23 @@ class TransformerEncoder(nn.Module):
         sequence.
     :param int n_positions: Size of the position embeddings matrix.
     """
+
     def __init__(
-        self,
-        n_heads,
-        n_layers,
-        embedding_size,
-        ffn_size,
-        vocabulary_size,
-        embedding=None,
-        dropout=0.0,
-        attention_dropout=0.0,
-        relu_dropout=0.0,
-        padding_idx=0,
-        learn_positional_embeddings=False,
-        embeddings_scale=False,
-        reduction=True,
-        n_positions=1024
+            self,
+            n_heads,
+            n_layers,
+            embedding_size,
+            ffn_size,
+            vocabulary_size,
+            embedding=None,
+            dropout=0.0,
+            attention_dropout=0.0,
+            relu_dropout=0.0,
+            padding_idx=0,
+            learn_positional_embeddings=False,
+            embeddings_scale=False,
+            reduction=True,
+            n_positions=1024
     ):
         super(TransformerEncoder, self).__init__()
 
@@ -270,7 +273,7 @@ class TransformerEncoder(nn.Module):
         # check input formats:
         if embedding is not None:
             assert (
-                embedding_size is None or embedding_size == embedding.weight.shape[1]
+                    embedding_size is None or embedding_size == embedding.weight.shape[1]
             ), "Embedding dim must match the embedding size."
 
         if embedding is not None:
@@ -332,13 +335,13 @@ class TransformerEncoder(nn.Module):
 
 class TransformerEncoderLayer(nn.Module):
     def __init__(
-        self,
-        n_heads,
-        embedding_size,
-        ffn_size,
-        attention_dropout=0.0,
-        relu_dropout=0.0,
-        dropout=0.0,
+            self,
+            n_heads,
+            embedding_size,
+            ffn_size,
+            attention_dropout=0.0,
+            relu_dropout=0.0,
+            dropout=0.0,
     ):
         super().__init__()
         self.dim = embedding_size
@@ -387,20 +390,20 @@ class TransformerDecoder(nn.Module):
     """
 
     def __init__(
-        self,
-        n_heads,
-        n_layers,
-        embedding_size,
-        ffn_size,
-        vocabulary_size,
-        embedding=None,
-        dropout=0.0,
-        attention_dropout=0.0,
-        relu_dropout=0.0,
-        embeddings_scale=True,
-        learn_positional_embeddings=False,
-        padding_idx=None,
-        n_positions=1024,
+            self,
+            n_heads,
+            n_layers,
+            embedding_size,
+            ffn_size,
+            vocabulary_size,
+            embedding=None,
+            dropout=0.0,
+            attention_dropout=0.0,
+            relu_dropout=0.0,
+            embeddings_scale=True,
+            learn_positional_embeddings=False,
+            padding_idx=None,
+            n_positions=1024,
     ):
         super().__init__()
         self.embedding_size = embedding_size
@@ -456,13 +459,13 @@ class TransformerDecoder(nn.Module):
 
 class TransformerDecoderLayer(nn.Module):
     def __init__(
-        self,
-        n_heads,
-        embedding_size,
-        ffn_size,
-        attention_dropout=0.0,
-        relu_dropout=0.0,
-        dropout=0.0,
+            self,
+            n_heads,
+            embedding_size,
+            ffn_size,
+            attention_dropout=0.0,
+            relu_dropout=0.0,
+            dropout=0.0,
     ):
         super().__init__()
         self.dim = embedding_size
@@ -564,14 +567,13 @@ class TransformerGeneratorModel(TorchGeneratorModel):
         entity2entityId = pkl.load(
             open(os.path.join(opt["datapath"], "redial", "entity2entityId.pkl"), "rb")
         )
-        self.kbrd = KBRD(opt['n_entity'],opt['n_relation'],opt['dim'], kg, None, None, num_bases=8)
+        self.kbrd = KBRD(opt['n_entity'], opt['n_relation'], opt['dim'], kg, None, None, num_bases=8)
         state_dict = torch.load('saved/both_rgcn_0')['model']
         self.kbrd.load_state_dict(state_dict)
         self.user_representation_to_bias_1 = nn.Linear(opt['dim'], 512)
         self.user_representation_to_bias_2 = nn.Linear(512, len(dictionary))
         for param in self.kbrd.parameters():
             param.requires_grad = False
-
 
     def reorder_encoder_states(self, encoder_states, indices):
         enc, mask = encoder_states
@@ -589,7 +591,8 @@ class TransformerGeneratorModel(TorchGeneratorModel):
         # project back to vocabulary
         output = F.linear(tensor, self.embeddings.weight)
         if hasattr(self, 'user_representation'):
-            up_bias = self.user_representation_to_bias_2(F.relu(self.user_representation_to_bias_1(self.user_representation)))
+            up_bias = self.user_representation_to_bias_2(
+                F.relu(self.user_representation_to_bias_1(self.user_representation)))
             # Expand to the whole sequence
             up_bias = up_bias.unsqueeze(dim=1)
             output += up_bias
@@ -681,10 +684,10 @@ class MultiHeadAttention(nn.Module):
         # [B * n_heads, query_len, key_len]
         attn_mask = (
             (mask == 0)
-            .view(batch_size, 1, -1, key_len)
-            .repeat(1, n_heads, 1, 1)
-            .expand(batch_size, n_heads, query_len, key_len)
-            .view(batch_size * n_heads, query_len, key_len)
+                .view(batch_size, 1, -1, key_len)
+                .repeat(1, n_heads, 1, 1)
+                .expand(batch_size, n_heads, query_len, key_len)
+                .view(batch_size * n_heads, query_len, key_len)
         )
         assert attn_mask.shape == dot_prod.shape
         dot_prod.masked_fill_(attn_mask, neginf(dot_prod.dtype))
@@ -695,9 +698,9 @@ class MultiHeadAttention(nn.Module):
         attentioned = attn_weights.bmm(v)
         attentioned = (
             attentioned.type_as(query)
-            .view(batch_size, n_heads, query_len, dim_per_head)
-            .transpose(1, 2).contiguous()
-            .view(batch_size, query_len, dim)
+                .view(batch_size, n_heads, query_len, dim_per_head)
+                .transpose(1, 2).contiguous()
+                .view(batch_size, query_len, dim)
         )
 
         out = self.out_lin(attentioned)
