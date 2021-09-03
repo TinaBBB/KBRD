@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-module load python/3.7
+module load python/3.6
 source ~/KBRD/bin/activate
 
 cd /home/tinashen/projects/def-ssanner/tinashen/KBRD
