@@ -133,6 +133,20 @@ The main reason is that we cached the entity linking process in KBRD for ReDial.
 3. Why the recommender and the dialog part are trained separatedly?
 Please refer to https://github.com/THUDM/KBRD/issues/9#issuecomment-556988541 for detailed explanation.
 
+Since the dialog and recommender was tested separately, so far the response generated from the repository can be split into 2 parts：
+
+<b>Generating conversations:</b> <br>
+python scripts/display_model.py -t redial -mf saved/transformer_rec_both_rgcn_0 -dt test
+
+The row for [TorchAgent] is for model generation.
+
+<b>Generating recommendations:</b><br>
+Please add return Output(list(map(lambda x: str(self.movie_ids[x]), outputs.argmax(dim=1).tolist()))) to the eval_step after https://github.com/THUDM/KBRD/blob/master/parlai/agents/kbrd/kbrd.py before execution.
+
+python scripts/display_model.py -t redial -mf saved/both_rgcn_0 -dt test
+
+[KbrdAgent] is the item entity id for the recommender system，the corresponding movie names can be found in data/redial/entity2entityID.pkl.
+
 If you have additional questions, please let us know.
 
 ## Cite
