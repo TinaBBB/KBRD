@@ -14,9 +14,10 @@ regex
 requests
 scikit-learn
 scipy
-# sh
+sh
 # sphinx
 # sphinx_rtd_theme
 tqdm
 # websocket-client
 # websocket-server
+torch
