@@ -1,4 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+module load python/3.7
+source ~/KBRD/bin/activate
+
+cd /home/tinashen/projects/def-ssanner/tinashen/KBRD
+
 let num_runs=24
 
 for i in $(seq 0 $((num_runs-1)));

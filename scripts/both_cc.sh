@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 module load python/3.7
-source ~/vae_uncertainty/bin/activate
+source ~/KBRD/bin/activate
+
+cd /home/tinashen/projects/def-ssanner/tinashen/KBRD
 
 let num_runs=$1
 let gpu_id=$2
