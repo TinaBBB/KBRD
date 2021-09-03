@@ -12,3 +12,5 @@ do
     CUDA_VISIBLE_DEVICES=$gpu_id python parlai/tasks/redial/train_kbrd.py -mf saved/both_rgcn_$i
 done
 
+
+
